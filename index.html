@@ -1,138 +1,199 @@
-<style>
-    .app-container {
-        width: 350px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .app-container{
+            width: 350px;
+        }
+        .calculator{
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .display{
+            grid-column-start: 1;
+            grid-column-end: 5;
+            text-align: end;
+            font-size: 40px;
+            border: 1px solid black;
+            padding-right: 10px;
+            padding-top: 5px;
+        }
+        button{
+            height: 50px;
+            background-color: white;
+            border: 1px solid black;
+        }
+        button.operator{
+            background-color: darkgrey;
+        }
 
-    }
-
-    .calculator {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        border: 1px solid rgba(20, 4, 7, 0.918);
-    }
-
-    .display {
-        grid-column-start: 1;
-        grid-column-end: 5;
-        text-align: end;
-        font-size: 50px;
-        border: 1px solid rgb(0, 0, 0);
-        padding-right: 10px;
-        padding-top: 5px;
-       
-    }
-
-    button {
-        height: 50px;
-        background-color: whitesmoke;
-        border: 1px solid rgb black
-      
-    }
-
-    button.operator {
-        background-color: darkgray;
-
-    }
-</style>
-
-
-
+        #app{
+            padding-left: 30px;
+            padding-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    
 <div id="app"></div>
 
-<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/react@18/umd/react.development.js"  crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"  crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <script type="text/babel">
-    // const hello = React.createElement('hi', {},  ' Hello React!');
-    //const hello = (
-    //<div> 
-    //<h1>Hello React! 123</h1>
-    //<a href="#">sample</a>
-    //</div>
+    // INTRO
+    //const hello = React.createElement('h1', {}, 'Hello React!');
+    //const hello = <h1>Hello React! 123</h1>;
+    
+    // const hello = (
+    //     <div>
+    //         <h1>Hello React! 123</h1>
+    //         <a href="#">sample</a>
+    //     </div>
+    // )
+    // ReactDOM.render(hello, document.getElementById('app'));
 
-    //const Kezia = (props) => (
-    //<div>
-    //<h2>Hello, my name is {props.name}  I am Age {props.age}</h2>
-    // <p>Lorem ipsum dolor sit.</p>
-    //<a href="http://" target="_blank" rel="noopener
-    // noreferrer">Sample Link</a>
-    //</div>
-    //);
-    //ReactDOM.render(<Kezia name="kezia" age={"22"}/>, document.getElementById("app"));
+// #########################################################
+//<!-- Functional Components -->
+// function sample(){
+//     return <h1>HELLO!</h1>
+// }
 
-    //React callback function
+// const sample = () => <h1>HELLO arrow function!</h1>
+// const sample = () => (
+//     <div>
+//         <h1>HELLO arrow function!</h1>
+//         <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus!</p>
+//     </div>
+// )
+
+// ReactDOM.render(sample(), document.getElementById('app'));
+// ###############################################################
+// COMPONENTS / Props
+// component sample
+// const Hello = () => (
+//     <div>
+//         <h1>Hello world!</h1>
+//         <p>This is a component!</p>
+//     </div>
+// )
+// 
+// component with props
+// const Hello = (props) => (
+//     <div>
+//         <h1>Hello,I am {props.fname} and I am {props.age}!</h1>
+//         <p>This is a component with props!</p>
+//     </div>
+// )
+// ReactDOM.render(<Hello fname="Bryan" age={15}/>, document.getElementById('app'))
+
+// ########################################################################################################
+// REACT callbak function
+// Parent component
+function Calculator(){
 
 
-    // parent component
-    function Calculator(){
+// useState
+    // const [display, setDisplay] = React.useState('0');
+    //useState returns an array with 2 elements, the first element is the current state value, the second element is a function that allows you to update the state value
+    const [calc, setCalc] = React.useState({
+        current: '0',
+        total: '0',
+        isInitial: true,
+        preOp: ''
+    });
 
+    function handleNumber(value){
+        let newValue = value;
 
-
-        function handleNumber(value) {
-            
-             let newNum = value;
-            
-            if(!calc.insInitial){
-               newNum = calc.current + value;
-            }
-            setCalc({current: newNum, insInitial: false});
+        if(!calc.isInitial){   //if the current value is not initial where the initial value is 0
+            newValue = calc.current + value;
         }
-             //handle clear button
 
-
-        function handleClear () {
-            setCalc({current: '0', insInitial: true});
-        }
-
-
-        //const [display, setDisplay] = REact.useState('0');
-
-        // useState
-        const [calc, setCalc] = React.useState({
-            current: '0',
-            total: '',
-            insInitial: true,
-            preOp: ''
+        setCalc({
+            current: newValue, 
+            total: calc.total, 
+            isInitial: false, 
+            preOp: calc.preOp
         });
-       
-
-        return (
-            <div className="Calculator">
-                <div className="display">{calc.current}</div>
-
-                <CalcButton onClick={handleNumber} value='7'/>
-                <CalcButton onClick={handleNumber} value='8'/>
-                <CalcButton onClick={handleNumber} value='6'/>
-                <CalcButton className="operator" value="+" />
-
-
-                <CalcButton onClick={handleNumber}  value='4'/>
-                <CalcButton onClick={handleNumber}  value='5'/>
-                <CalcButton  onClick={handleNumber} value='6'/>
-                <CalcButton className="operator" value="-" />
-
-
-                <CalcButton  onClick={handleNumber} value='1'/>
-                <CalcButton  onClick={handleNumber} value='2'/>
-                <CalcButton onClick={handleNumber}  value='3'/>
-                <CalcButton className="operator" value="*" />
-
-
-                <CalcButton value="C"onClick={handleClear} />
-                <CalcButton value="0" onClick={handleNumber} />
-                <CalcButton className="operator" value="=" />
-                <CalcButton className="operator" value="/" />
-
-            </div>
-        )
     }
 
-    //Child Component
-    function CalcButton(props) {
-        return (
-            <button className={props.className} onClick={() => props.onClick(props.value)}>{props.value}</button>
-        );
-
+    // handle clear button
+    function handleClear(){
+        setCalc({current: '0', total: '0', isInitial: true, preOp: ''});
     }
-    ReactDOM.render(<div className="app-container"><Calculator /></div>, document.getElementById("app"));
+
+    // function for handling the operator
+    function handleOperator(value){
+        const total = doCalculation();
+
+        setCalc({
+        current: total.toString(), 
+        total: total.toString(), 
+        isInitial: true, 
+        preOp: value});
+    }
+    // function for calculation
+    function doCalculation(){
+        let total = parseFloat(calc.total);
+        switch(calc.preOp){
+            case '+':
+                total += parseFloat(calc.current);
+                break;
+            case '-':
+                total -= parseFloat(calc.current);
+                break;
+            case '*':
+                total *= parseFloat(calc.current);
+                break;
+            case '/':
+                total /= parseFloat(calc.current);
+                break;
+            default:
+                total = parseFloat(calc.current);
+        }
+        return total;
+    }
+
+    return(
+        <div className="calculator">
+            <div className="display">{calc.current}</div>
+
+            <CalcButton onClick={handleNumber} value='7'/>
+            <CalcButton onClick={handleNumber} value='8'/>
+            <CalcButton onClick={handleNumber} value='9'/>
+            <CalcButton className="operator" value="+" onClick={handleOperator}/>
+
+            <CalcButton onClick={handleNumber} value='4'/>
+            <CalcButton onClick={handleNumber} value='5'/>
+            <CalcButton onClick={handleNumber} value='6'/>
+            <CalcButton className="operator" value="-" onClick={handleOperator}/>
+
+            <CalcButton onClick={handleNumber} value='1'/>
+            <CalcButton onClick={handleNumber} value='2'/>
+            <CalcButton onClick={handleNumber} value='3'/>
+            <CalcButton className="operator" value="/" onClick={handleOperator}/>
+
+            <CalcButton value="C" onClick={handleClear}/>
+            <CalcButton onClick={handleNumber} value='0'/>
+            <CalcButton className="operator" value="=" onClick={handleOperator}/>
+            <CalcButton className="operator" value="*" onClick={handleOperator}/>
+        </div>
+    );
+}
+
+// child component
+function CalcButton(props){
+    return(
+        <button className={props.className} onClick={()=>props.onClick(props.value)}>{props.value}</button>
+    )
+}
+ReactDOM.render(<div className="app-container"><Calculator/></div>, document.getElementById('app'))
+
 </script>
+</body>
+</html>
